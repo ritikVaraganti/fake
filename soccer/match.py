@@ -423,7 +423,7 @@ class Match:
             Counter background
         """
 
-        counter = PIL.Image.open("./images/passes_board.png").convert("RGBA")
+        counter = PIL.Image.open("/kaggle/working/fake/images/passes_board.png").convert("RGBA")
         counter = Draw.add_alpha(counter, 210)
         counter = np.array(counter)
         red, green, blue, alpha = counter.T
