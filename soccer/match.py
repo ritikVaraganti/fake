@@ -9,6 +9,7 @@ from soccer.draw import Draw
 from soccer.pass_event import Pass, PassEvent
 from soccer.player import Player
 from soccer.team import Team
+from PIL import Image
 import os
 
 
