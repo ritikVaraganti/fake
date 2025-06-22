@@ -63,31 +63,51 @@ def get_ball_detections(
 
 
 def get_player_detections(
-    person_detector: YoloV5, frame: np.ndarray
+    person_detector: YOLO, frame: np.ndarray
 ) -> List[norfair.Detection]:
     """
-    Uses YoloV5 Detector in order to detect the players
-    in a match and filter out the detections that are not players
-    and have confidence lower than 0.35.
+    Detects players in the frame using a YOLO model and returns Norfair Detections.
 
     Parameters
     ----------
-    person_detector : YoloV5
-        YoloV5 detector
+    person_detector : YOLO
+        Trained YOLO model for detecting people.
     frame : np.ndarray
-        _description_
+        Video frame.
 
     Returns
     -------
     List[norfair.Detection]
-        List of player detections
+        List of detected players.
     """
+    results = person_detector.predict(frame)[0]
+    boxes = results.boxes
 
-    person_df = person_detector.predict(frame)
-    person_df = person_df[person_df["name"] == "person"]
-    person_df = person_df[person_df["confidence"] > 0.35]
-    person_detections = Converter.DataFrame_to_Detections(person_df)
-    return person_detections
+    if boxes is None or boxes.xyxy is None:
+        return []
+
+    xyxy = boxes.xyxy.cpu().numpy()
+    conf = boxes.conf.cpu().numpy()
+    clses = boxes.cls.cpu().numpy()
+
+    valid = conf > 0.35
+    xyxy = xyxy[valid]
+    conf = conf[valid]
+    clses = clses[valid]
+
+    import pandas as pd
+    player_df = pd.DataFrame({
+        "xmin": xyxy[:, 0],
+        "ymin": xyxy[:, 1],
+        "xmax": xyxy[:, 2],
+        "ymax": xyxy[:, 3],
+        "confidence": conf,
+        "class": clses,
+        "name": ["person"] * len(clses),  # You could use class_map if available
+    })
+
+    return Converter.DataFrame_to_Detections(player_df)
+
 
 
 def create_mask(frame: np.ndarray, detections: List[norfair.Detection]) -> np.ndarray:
