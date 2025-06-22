@@ -29,9 +29,37 @@ def get_ball_detections(
     List[norfair.Detection]
         List of ball detections
     """
-    ball_df = ball_detector.predict(frame)
-    ball_df = ball_df[ball_df["confidence"] > 0.3]
+    results = ball_detector.predict(frame)[0]
+
+    # Extract data
+    boxes = results.boxes
+    if boxes is None:
+        return []
+    
+    xyxy = boxes.xyxy.cpu().numpy()        # (x1, y1, x2, y2)
+    conf = boxes.conf.cpu().numpy()        # confidence scores
+    clses = boxes.cls.cpu().numpy()        # class indices
+    
+    # Filter by confidence > 0.3
+    valid = conf > 0.3
+    xyxy = xyxy[valid]
+    conf = conf[valid]
+    clses = clses[valid]
+    
+    # Convert to your expected format (DataFrame or whatever Converter expects)
+    import pandas as pd
+    ball_df = pd.DataFrame({
+        "xmin": xyxy[:, 0],
+        "ymin": xyxy[:, 1],
+        "xmax": xyxy[:, 2],
+        "ymax": xyxy[:, 3],
+        "confidence": conf,
+        "class": clses,
+        "name": ["ball"] * len(clses),  # or class_map[int(cls)] if you have one
+    })
+    
     return Converter.DataFrame_to_Detections(ball_df)
+
 
 
 def get_player_detections(
