@@ -63,7 +63,7 @@ def get_ball_detections(
 
 
 def get_player_detections(
-    person_detector: YOLO, frame: np.ndarray
+    person_detector, frame: np.ndarray
 ) -> List[norfair.Detection]:
     """
     Detects players in the frame using a YOLO model and returns Norfair Detections.
