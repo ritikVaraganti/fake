@@ -398,7 +398,13 @@ class Match:
             Counter background
         """
 
-        counter = PIL.Image.open("./images/possession_board.png").convert("RGBA")
+        # import os
+        # from PIL import Image
+        
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        image_path = os.path.join(script_dir, '..', 'images', 'possession_board.png')
+        
+        counter = Image.open(image_path).convert("RGBA")
         counter = Draw.add_alpha(counter, 210)
         counter = np.array(counter)
         red, green, blue, alpha = counter.T
