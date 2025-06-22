@@ -359,7 +359,7 @@ class Draw:
         return overlay
 
     @staticmethod
-    def draw_centered_text(img, text, origin, width, height, font=None, color=(255, 255, 255)):
+    def text_in_middle_rectangle(img, text, origin, width, height, font=None, color=(255, 255, 255)):
         draw = PIL.ImageDraw.Draw(img)
     
         if font is None:
