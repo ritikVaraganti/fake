@@ -79,7 +79,7 @@ class Draw:
         draw = PIL.ImageDraw.Draw(img)
 
         if font is None:
-            font = PIL.ImageFont.truetype("fonts/Gidole-Regular.ttf", size=20)
+            font = PIL.ImageFont.truetype("/kaggle/working/fake/fonts/Gidole-Regular.ttf", size=20)
 
         draw.text(
             origin,
