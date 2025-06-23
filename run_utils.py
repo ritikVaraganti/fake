@@ -10,7 +10,7 @@ from soccer import Ball, Match
 
 
 def get_ball_detections(
-    ball_detector: YoloV5, frame: np.ndarray
+    ball_detector, frame: np.ndarray
 ) -> List[norfair.Detection]:
     """
     Uses custom Yolov5 detector in order
@@ -30,7 +30,7 @@ def get_ball_detections(
         List of ball detections
     """
     results = ball_detector.predict(frame)[0]
-
+    print(f'results from run_utils: {results[0]}')
     # Extract data
     boxes = results.boxes
     if boxes is None:
