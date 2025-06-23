@@ -92,9 +92,9 @@ def get_player_detections(
     clses = boxes.cls.cpu().numpy()
 
     valid_mask = conf > 0.3
-    xyxy = xyxy[valid]
-    conf = conf[valid]
-    clses = clses[valid]
+    xyxy = xyxy[valid_mask]
+    conf = conf[valid_mask]
+    clses = clses[valid_mask]
 
     import pandas as pd
     player_df = pd.DataFrame({
