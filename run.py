@@ -97,9 +97,11 @@ for i, frame in enumerate(video):
     # Get Detections
     players_detections = get_player_detections(player_detector, frame)
     ball_detections = get_ball_detections(ball_detector, frame)
-    print(f'ball_detections points: {ball_detections.points}')
-    print(f'ball_detections data: {ball_detections.data}')
-    print(f'ball_detections scores: {ball_detections.scores}')
+    for det in ball_detections:
+        print("Bounding box points:", det.points)
+        print("Data dictionary:", det.data)
+        print("Confidence score:", det.scores)
+
     
 
 
