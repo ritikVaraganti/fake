@@ -153,7 +153,7 @@ for i, frame in enumerate(video):
 
     if args.passes:
         pass_list = match.passes
-        print(f'passlist: {passlist}')
+        print(f'passlist: {pass_list}')
         frame = Pass.draw_pass_list(
             img=frame, passes=pass_list, coord_transformations=coord_transformations
         )
