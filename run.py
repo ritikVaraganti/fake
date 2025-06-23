@@ -97,6 +97,7 @@ for i, frame in enumerate(video):
     # Get Detections
     players_detections = get_player_detections(player_detector, frame)
     ball_detections = get_ball_detections(ball_detector, frame)
+    print(f'ball_detections: {ball_detections}')
     detections = ball_detections + players_detections
 
     # Update trackers
@@ -116,7 +117,7 @@ for i, frame in enumerate(video):
 
     player_detections = Converter.TrackedObjects_to_Detections(player_track_objects)
     ball_detections = Converter.TrackedObjects_to_Detections(ball_track_objects)
-
+    print(f'ball_detections 2: {ball_detections}')
     player_detections = classifier.predict_from_detections(
         detections=player_detections,
         img=frame,
@@ -124,6 +125,7 @@ for i, frame in enumerate(video):
 
     # Match update
     ball = get_main_ball(ball_detections)
+    print(f'ball: {ball}')
     players = Player.from_detections(detections=players_detections, teams=teams)
     match.update(players, ball)
 
@@ -151,7 +153,7 @@ for i, frame in enumerate(video):
 
     if args.passes:
         pass_list = match.passes
-
+        print(f'passlist: {passlist}')
         frame = Pass.draw_pass_list(
             img=frame, passes=pass_list, coord_transformations=coord_transformations
         )
