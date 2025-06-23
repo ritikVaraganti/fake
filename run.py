@@ -78,10 +78,15 @@ player_tracker = Tracker(
 
 ball_tracker = Tracker(
     distance_function=mean_euclidean,
-    distance_threshold=150,
-    initialization_delay=20,
-    hit_counter_max=2000,
+    distance_threshold=80,            # Smaller for small objects like the ball
+    initialization_delay=1,           # Ball gets tracked as soon as it's detected once
+    detection_threshold=0.2,          # Accepts lower-confidence detections (your p ~ 0.3)
+    hit_counter_max=30,               # Object persists for a short while if detection is lost
 )
+print(ball_tracker.detection_threshold)
+print(ball_tracker.distance_threshold)
+print(ball_tracker.initialization_delay)
+
 motion_estimator = MotionEstimator()
 coord_transformations = None
 
