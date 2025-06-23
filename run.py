@@ -121,7 +121,7 @@ for i, frame in enumerate(video):
     ball_track_objects = ball_tracker.update(
         detections=ball_detections, coord_transformations=coord_transformations
     )
-    print(ball_track_objects)
+    print(f'BALL TRACK OBJECTS{ball_track_objects}')
     player_detections = Converter.TrackedObjects_to_Detections(player_track_objects)
     ball_detections = Converter.TrackedObjects_to_Detections(ball_track_objects)
     print(f'ball_detections 2: {ball_detections}')
