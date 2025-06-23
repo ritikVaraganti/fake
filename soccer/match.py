@@ -63,6 +63,8 @@ class Match:
             self.closest_player = None
             return
 
+        print('ball is not none and ball.detection is not none')
+
         self.ball = ball
 
         closest_player = min(players, key=lambda player: player.distance_to_ball(ball))
