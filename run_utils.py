@@ -40,7 +40,7 @@ def get_ball_detections(
     clses = boxes.cls.cpu().numpy()       # class indices
 
     # Filter by confidence > 0.3
-    valid_mask = conf
+    valid_mask = conf > 0.3
     xyxy = xyxy[valid_mask]
     conf = conf[valid_mask]
     clses = clses[valid_mask]
@@ -91,7 +91,7 @@ def get_player_detections(
     conf = boxes.conf.cpu().numpy()
     clses = boxes.cls.cpu().numpy()
 
-    valid_mask = (conf > 0.3).cpu().numpy()
+    valid_mask = conf > 0.3
     xyxy = xyxy[valid]
     conf = conf[valid]
     clses = clses[valid]
