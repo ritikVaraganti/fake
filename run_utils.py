@@ -30,7 +30,8 @@ def get_ball_detections(
         List of ball detections
     """
     results = ball_detector.predict(frame)[0]
-    print(f'results from run_utils: {results[0]}')
+    print(f'results from run_utils: {results[0].boxes}')
+    print(f'full results from run_utils: {results}')
     # Extract data
     boxes = results.boxes
     if boxes is None:
