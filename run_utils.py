@@ -59,29 +59,29 @@ from soccer import Ball, Match
 #     })
     
 #     return Converter.DataFrame_to_Detections(ball_df)
-    def get_ball_detections(
-        ball_detector: YoloV5, frame: np.ndarray
-    ) -> List[norfair.Detection]:
-        """
-        Uses custom Yolov5 detector in order
-        to get the predictions of the ball and converts it to
-        Norfair.Detection list.
-    
-        Parameters
-        ----------
-        ball_detector : YoloV5
-            YoloV5 detector for balls
-        frame : np.ndarray
-            Frame to get the ball detections from
-    
-        Returns
-        -------
-        List[norfair.Detection]
-            List of ball detections
-        """
-        ball_df = ball_detector.predict(frame)
-        ball_df = ball_df[ball_df["confidence"] > 0.3]
-        return Converter.DataFrame_to_Detections(ball_df)
+def get_ball_detections(
+    ball_detector: YoloV5, frame: np.ndarray
+) -> List[norfair.Detection]:
+    """
+    Uses custom Yolov5 detector in order
+    to get the predictions of the ball and converts it to
+    Norfair.Detection list.
+
+    Parameters
+    ----------
+    ball_detector : YoloV5
+        YoloV5 detector for balls
+    frame : np.ndarray
+        Frame to get the ball detections from
+
+    Returns
+    -------
+    List[norfair.Detection]
+        List of ball detections
+    """
+    ball_df = ball_detector.predict(frame)
+    ball_df = ball_df[ball_df["confidence"] > 0.3]
+    return Converter.DataFrame_to_Detections(ball_df)
 
 
 def get_player_detections(
