@@ -13,14 +13,12 @@ def get_ball_detections(
     ball_detector, frame: np.ndarray
 ) -> List[norfair.Detection]:
     """
-    Uses custom Yolov5 detector in order
-    to get the predictions of the ball and converts it to
-    Norfair.Detection list.
+    Uses a YOLO detector to get ball predictions and converts them to Norfair.Detection list.
 
     Parameters
     ----------
-    ball_detector : YoloV5
-        YoloV5 detector for balls
+    ball_detector : YOLO
+        YOLO detector for balls
     frame : np.ndarray
         Frame to get the ball detections from
 
@@ -29,25 +27,28 @@ def get_ball_detections(
     List[norfair.Detection]
         List of ball detections
     """
-    results = ball_detector.predict(frame)[0]
-    print(f'results from run_utils: {results[0].boxes}')
-    print(f'full results from run_utils: {results}')
-    # Extract data
+    results = ball_detector(frame)[0]  # With ultralytics YOLOv8/v11 style
     boxes = results.boxes
-    if boxes is None:
+
+    if boxes is None or boxes.xyxy.shape[0] == 0:
+        print('_______________________________')
         return []
-    
-    xyxy = boxes.xyxy.cpu().numpy()        # (x1, y1, x2, y2)
-    conf = boxes.conf.cpu().numpy()        # confidence scores
-    clses = boxes.cls.cpu().numpy()        # class indices
-    
+
+    # Extract detection data
+    xyxy = boxes.xyxy.cpu().numpy()       # (x1, y1, x2, y2)
+    conf = boxes.conf.cpu().numpy()       # confidence scores
+    clses = boxes.cls.cpu().numpy()       # class indices
+
     # Filter by confidence > 0.3
-    valid = conf > 0.3
-    xyxy = xyxy[valid]
-    conf = conf[valid]
-    clses = clses[valid]
-    
-    # Convert to your expected format (DataFrame or whatever Converter expects)
+    valid_mask = conf
+    xyxy = xyxy[valid_mask]
+    conf = conf[valid_mask]
+    clses = clses[valid_mask]
+
+    if xyxy.shape[0] == 0:
+        return []
+
+    # Build DataFrame for compatibility with Converter
     import pandas as pd
     ball_df = pd.DataFrame({
         "xmin": xyxy[:, 0],
@@ -56,10 +57,11 @@ def get_ball_detections(
         "ymax": xyxy[:, 3],
         "confidence": conf,
         "class": clses,
-        "name": ["ball"] * len(clses),  # or class_map[int(cls)] if you have one
+        "name": ["ball"] * len(clses)
     })
-    
+
     return Converter.DataFrame_to_Detections(ball_df)
+
 
 def get_player_detections(
     person_detector, frame: np.ndarray
