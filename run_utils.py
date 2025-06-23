@@ -91,7 +91,7 @@ def get_player_detections(
     conf = boxes.conf.cpu().numpy()
     clses = boxes.cls.cpu().numpy()
 
-    valid = conf > 0.35
+    valid_mask = (conf > 0.3).cpu().numpy()
     xyxy = xyxy[valid]
     conf = conf[valid]
     clses = clses[valid]
