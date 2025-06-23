@@ -121,7 +121,7 @@ for i, frame in enumerate(video):
     ball_track_objects = ball_tracker.update(
         detections=ball_detections, coord_transformations=coord_transformations
     )
-
+    print(ball_df)
     player_detections = Converter.TrackedObjects_to_Detections(player_track_objects)
     ball_detections = Converter.TrackedObjects_to_Detections(ball_track_objects)
     print(f'ball_detections 2: {ball_detections}')
@@ -132,7 +132,7 @@ for i, frame in enumerate(video):
 
     # Match update
     ball = get_main_ball(ball_detections)
-    print(f'ball: {ball}')
+    #print(f'ball: {ball}')
     players = Player.from_detections(detections=players_detections, teams=teams)
     match.update(players, ball)
 
@@ -160,7 +160,7 @@ for i, frame in enumerate(video):
 
     if args.passes:
         pass_list = match.passes
-        print(f'passlist: {pass_list}')
+        #print(f'passlist: {pass_list}')
         frame = Pass.draw_pass_list(
             img=frame, passes=pass_list, coord_transformations=coord_transformations
         )
