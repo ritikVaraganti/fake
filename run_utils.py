@@ -31,7 +31,7 @@ def get_ball_detections(
     boxes = results.boxes
 
     if boxes is None or boxes.xyxy.shape[0] == 0:
-        print('_______________________________')
+        #print('_______________________________')
         return []
 
     # Extract detection data
