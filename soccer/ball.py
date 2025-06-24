@@ -17,10 +17,8 @@ class Ball:
         """
         self.detection = detection
         self.color = None
-
-        # Store previous center for speed & direction calculations
-        self.previous_center = None
-
+        self.prev_center_abs = None
+        self.velocity = (0, 0)
     def set_color(self, match: "Match"):
         """
         Sets the color of the ball to the team color with the ball possession in the match.
@@ -115,42 +113,40 @@ class Ball:
 
         return Draw.draw_detection(self.detection, frame)
 
-    def __str__(self):
-        return f"Ball: {self.center}"
-        
-    def get_direction(self) -> np.ndarray:
-        """
-        Get normalized direction vector of ball movement.
-        Returns
-        -------
-        np.ndarray
-            Unit vector of direction or None if cannot compute
-        """
-        if self.previous_center is None or self.center_abs is None:
-            return None
     
-        movement = np.array(self.center_abs) - np.array(self.previous_center)
-        norm = np.linalg.norm(movement)
-        if norm == 0:
-            return None
-    
-        return movement / norm
+    def update_with_sanity_check(self, new_detection: norfair.Detection, max_speed_px_per_frame=60):
+        """
+        Updates ball detection, rejecting unrealistic jumps.
+        If jump is unrealistic, estimate new center using velocity.
+        """
+        new_center = self.get_center(new_detection.absolute_points)
 
-    def get_direction(self) -> np.ndarray:
-        """
-        Get normalized direction vector of ball movement.
-        Returns
-        -------
-        np.ndarray
-            Unit vector of direction or None if cannot compute
-        """
-        if self.previous_center is None or self.center_abs is None:
-            return None
-    
-        movement = np.array(self.center_abs) - np.array(self.previous_center)
-        norm = np.linalg.norm(movement)
-        if norm == 0:
-            return None
-    
-        return movement / norm
+        if self.center_abs is not None:
+            dx = new_center[0] - self.center_abs[0]
+            dy = new_center[1] - self.center_abs[1]
+            distance = np.sqrt(dx**2 + dy**2)
+
+            if distance > max_speed_px_per_frame:
+                print("⚠️ Unrealistic ball jump detected - applying predicted position.")
+                # Predict next position
+                predicted_x = self.center_abs[0] + self.velocity[0]
+                predicted_y = self.center_abs[1] + self.velocity[1]
+
+                # Update detection absolute_points to predicted location
+                corrected_points = np.array([
+                    [predicted_x - 5, predicted_y - 5],
+                    [predicted_x + 5, predicted_y + 5]
+                ])
+                new_detection.absolute_points = corrected_points
+
+                # Recalculate center after correction
+                new_center = self.get_center(corrected_points)
+
+        # Update state
+        if self.center_abs is not None:
+            self.velocity = (new_center[0] - self.center_abs[0], new_center[1] - self.center_abs[1])
+
+        self.prev_center_abs = self.center_abs
+        self.detection = new_detection
+
 
