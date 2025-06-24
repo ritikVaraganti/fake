@@ -18,6 +18,9 @@ class Ball:
         self.detection = detection
         self.color = None
 
+        # Store previous center for speed & direction calculations
+        self.previous_center = None
+
     def set_color(self, match: "Match"):
         """
         Sets the color of the ball to the team color with the ball possession in the match.
@@ -114,3 +117,40 @@ class Ball:
 
     def __str__(self):
         return f"Ball: {self.center}"
+        
+    def get_direction(self) -> np.ndarray:
+        """
+        Get normalized direction vector of ball movement.
+        Returns
+        -------
+        np.ndarray
+            Unit vector of direction or None if cannot compute
+        """
+        if self.previous_center is None or self.center_abs is None:
+            return None
+    
+        movement = np.array(self.center_abs) - np.array(self.previous_center)
+        norm = np.linalg.norm(movement)
+        if norm == 0:
+            return None
+    
+        return movement / norm
+
+    def get_direction(self) -> np.ndarray:
+        """
+        Get normalized direction vector of ball movement.
+        Returns
+        -------
+        np.ndarray
+            Unit vector of direction or None if cannot compute
+        """
+        if self.previous_center is None or self.center_abs is None:
+            return None
+    
+        movement = np.array(self.center_abs) - np.array(self.previous_center)
+        norm = np.linalg.norm(movement)
+        if norm == 0:
+            return None
+    
+        return movement / norm
+
