@@ -89,7 +89,7 @@ class Ball:
         if self.detection is None:
             return None
 
-        center = self.get_center(self.detection.absolute_points)
+        center = self.get_center(self.detection.points)
         round_center = np.round_(center)
 
         return round_center
