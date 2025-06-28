@@ -195,7 +195,7 @@ def update_with_sanity_check(self, frame_length, frame_height, new_detection: no
     Updates ball detection, rejecting unrealistic jumps.
     If jump is unrealistic, estimate new center using velocity.
     """
-    if new_detection=None:
+    if new_detection == None:
         print('new_detection=none')
     new_center = self.get_center(new_detection.absolute_points)
 
