@@ -190,48 +190,8 @@ def update_motion_estimator(
     coord_transformations = motion_estimator.update(frame, mask=mask)
     return coord_transformations
 
-def update_with_sanity_check(self, frame_length, frame_height, new_detection: norfair.Detection=None):
-    """
-    Updates ball detection, rejecting unrealistic jumps.
-    If jump is unrealistic, estimate new center using velocity.
-    """
-    if new_detection == None:
-        print('new_detection=none')
-        return
-    new_center = self.get_center(new_detection.absolute_points)
 
-    dy = frame_length * 0.05
-    dx = frame_height * 0.07
-    max_speed_px_per_frame=15
-    #check if ball is outside of a normal range of movement (bc soccer is a continuous game hardcoding risk boxes should be fine
-    #this goes in run_utils, where it is used as a check after detections are retrieved
-    if (self.center_abs[0] - dx) > self.prev_center_abs[0] or (self.center_abs[1] - dy) > self.prev_center_abs[1]:
-        dx1 = new_center[0] - self.center_abs[0]
-        dy1 = new_center[1] - self.center_abs[1]
-        distance = np.sqrt(dx1**2 + dy1**2)
-
-        if distance > max_speed_px_per_frame:
-            # Predict next position
-            predicted_x = self.center_abs[0] + self.velocity[0]
-            predicted_y = self.center_abs[1] + self.velocity[1]
-
-            # Update detection absolute_points to predicted location
-            corrected_points = np.array([
-                [predicted_x - 5, predicted_y - 5],
-                [predicted_x + 5, predicted_y + 5]
-            ])
-            new_detection.absolute_points = corrected_points
-
-            # Recalculate center after correction
-            new_center = self.get_center(corrected_points)
-
-        # Update state
-        if self.center_abs is not None:
-            self.velocity = (new_center[0] - self.center_abs[0], new_center[1] - self.center_abs[1])
-
-        self.prev_center_abs = self.center_abs
-        self.detection = new_detection
-def get_main_ball(ball : Ball, match: Match = None) -> Ball:
+def get_main_ball(detections: List[Detection], match: Match = None) -> Ball:
     """
     Gets the main ball from a list of balls detection
 
@@ -250,12 +210,12 @@ def get_main_ball(ball : Ball, match: Match = None) -> Ball:
     Ball
         Main ball
     """
-    #ball = Ball(detection=None)
+    ball = Ball(detection=None)
 
     if match:
         ball.set_color(match)
 
-    # if detections:
-    #     ball.detection = detections[0]
+    if detections:
+        ball.detection = detections[0]
 
     return ball
