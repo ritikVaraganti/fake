@@ -255,7 +255,7 @@ def get_main_ball(ball : Ball, match: Match = None) -> Ball:
     if match:
         ball.set_color(match)
 
-    if detections:
-        ball.detection = detections[0]
+    # if detections:
+    #     ball.detection = detections[0]
 
     return ball
