@@ -198,7 +198,7 @@ def update_with_sanity_check(self, frame_length, frame_height, new_detection: no
     if new_detection == None:
         print('new_detection=none')
         return
-    new_center = self.get_center(new_detection.points)
+    new_center = self.get_center(new_detection.absolute_points)
 
     dy = frame_length * 0.05
     dx = frame_height * 0.07
@@ -220,7 +220,7 @@ def update_with_sanity_check(self, frame_length, frame_height, new_detection: no
                 [predicted_x - 5, predicted_y - 5],
                 [predicted_x + 5, predicted_y + 5]
             ])
-            new_detection.points = corrected_points
+            new_detection.absolute_points = corrected_points
 
             # Recalculate center after correction
             new_center = self.get_center(corrected_points)
