@@ -140,6 +140,8 @@ for i, frame in enumerate(video):
 
     # Match update
     ball = Ball(ball_detections)
+    print(ball_detections)
+    print(ball_detections[0])
     if len(ball_detections) == 0:
         ball = update_with_sanity_check(ball, width, height)
     else:
