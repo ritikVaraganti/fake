@@ -228,7 +228,7 @@ def update_with_sanity_check(self, new_detection: norfair.Detection, frame_lengt
 
         self.prev_center_abs = self.center_abs
         self.detection = new_detection
-def get_main_ball(detections: List[Detection], match: Match = None) -> Ball:
+def get_main_ball(ball : Ball, match: Match = None) -> Ball:
     """
     Gets the main ball from a list of balls detection
 
@@ -247,7 +247,7 @@ def get_main_ball(detections: List[Detection], match: Match = None) -> Ball:
     Ball
         Main ball
     """
-    ball = Ball(detection=None)
+    #ball = Ball(detection=None)
 
     if match:
         ball.set_color(match)
