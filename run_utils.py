@@ -190,11 +190,13 @@ def update_motion_estimator(
     coord_transformations = motion_estimator.update(frame, mask=mask)
     return coord_transformations
 
-def update_with_sanity_check(self, new_detection: norfair.Detection, frame_length, frame_height):
+def update_with_sanity_check(self, new_detection: norfair.Detection=None, frame_length, frame_height):
     """
     Updates ball detection, rejecting unrealistic jumps.
     If jump is unrealistic, estimate new center using velocity.
     """
+    if new_detection=None:
+        print('new_detection=none')
     new_center = self.get_center(new_detection.absolute_points)
 
     dy = frame_length * 0.05
