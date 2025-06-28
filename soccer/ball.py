@@ -114,7 +114,7 @@ class Ball:
         return Draw.draw_detection(self.detection, frame)
 
     
-    def update_with_sanity_check(self, new_detection: norfair.Detection, frame_length, frame_height):
+    def update_with_sanity_check(self, frame_length, frame_height, new_detection: norfair.Detection=None):
         """
         Updates ball detection, rejecting unrealistic jumps.
         If jump is unrealistic, estimate new center using velocity.
