@@ -140,7 +140,7 @@ for i, frame in enumerate(video):
 
     # Match update
     ball = Ball(ball_detections)
-    ball = update_with_sanity_check(ball, ball_detections[0], width, height)
+    ball = update_with_sanity_check(ball, width, height, ball_detections[0])
     ball = get_main_ball(ball)
     #print(f'ball: {ball}')
     players = Player.from_detections(detections=players_detections, teams=teams)
