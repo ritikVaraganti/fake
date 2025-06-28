@@ -102,10 +102,10 @@ for i, frame in enumerate(video):
     # Get Detections
     players_detections = get_player_detections(player_detector, frame)
     ball_detections = get_ball_detections(ball_detector, frame)
-    for det in ball_detections:
-        print("Bounding box points:", det.points)
-        print("Data dictionary:", det.data)
-        print("Confidence score:", det.scores)
+    #for det in ball_detections:
+        #print("Bounding box points:", det.points)
+        #print("Data dictionary:", det.data)
+        #print("Confidence score:", det.scores)
 
     
 
@@ -126,10 +126,10 @@ for i, frame in enumerate(video):
     ball_track_objects = ball_tracker.update(
         detections=ball_detections, coord_transformations=coord_transformations
     )
-    print(f'BALL TRACK OBJECTS{ball_track_objects}')
+    #print(f'BALL TRACK OBJECTS{ball_track_objects}')
     player_detections = Converter.TrackedObjects_to_Detections(player_track_objects)
     ball_detections = Converter.TrackedObjects_to_Detections(ball_track_objects)
-    print(f'ball_detections 2: {ball_detections}')
+    #print(f'ball_detections 2: {ball_detections}')
     player_detections = classifier.predict_from_detections(
         detections=player_detections,
         img=frame,
