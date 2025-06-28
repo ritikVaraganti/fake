@@ -102,7 +102,6 @@ for i, frame in enumerate(video):
     # Get Detections
     players_detections = get_player_detections(player_detector, frame)
     ball_detections = get_ball_detections(ball_detector, frame)
-    update_with_sanity_check(ball_detections)
     #for det in ball_detections:
         #print("Bounding box points:", det.points)
         #print("Data dictionary:", det.data)
@@ -130,6 +129,9 @@ for i, frame in enumerate(video):
     #print(f'BALL TRACK OBJECTS{ball_track_objects}')
     player_detections = Converter.TrackedObjects_to_Detections(player_track_objects)
     ball_detections = Converter.TrackedObjects_to_Detections(ball_track_objects)
+
+    height, width = frame.shape
+    update_with_sanity_check(ball_detections, width, height
     #print(f'ball_detections 2: {ball_detections}')
     player_detections = classifier.predict_from_detections(
         detections=player_detections,
@@ -137,6 +139,7 @@ for i, frame in enumerate(video):
     )
 
     # Match update
+    ball = update_with_sanity_check(ball_detections, width, height)
     ball = get_main_ball(ball_detections)
     #print(f'ball: {ball}')
     players = Player.from_detections(detections=players_detections, teams=teams)
