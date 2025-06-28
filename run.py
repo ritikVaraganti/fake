@@ -14,7 +14,8 @@ from run_utils import (
     get_ball_detections,
     get_main_ball,
     get_player_detections,
-    update_motion_estimator,
+    update_with_sanity_check,
+    update_motion_estimator
 )
 from soccer import Match, Player, Team, Ball
 from soccer.draw import AbsolutePath
