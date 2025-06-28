@@ -191,31 +191,87 @@ def update_motion_estimator(
     return coord_transformations
 
 
-def get_main_ball(detections: List[Detection], match: Match = None) -> Ball:
+def get_main_ball(
+    detections: List[Detection],
+    frame_length,
+    frame_height,
+    prev_center: Tuple[float, float],
+    velocity: Tuple[float, float],
+    match: Match = None
+) -> Tuple[Ball, Tuple[float, float], Tuple[float, float]]:
     """
-    Gets the main ball from a list of balls detection
-
-    The match is used in order to set the color of the ball to
-    the color of the team in possession of the ball.
+    Gets the main ball from a list of detections with sanity check applied.
 
     Parameters
     ----------
     detections : List[Detection]
-        List of detections
+        List of ball detections
+    frame_length : int
+        Frame height
+    frame_height : int
+        Frame width
+    prev_center : Tuple[float, float]
+        Previous ball center for sanity check
+    velocity : Tuple[float, float]
+        Previous velocity for sanity check
     match : Match, optional
-        Match object, by default None
+        Match object for team color
 
     Returns
     -------
     Ball
-        Main ball
+        Main ball after sanity check
+    Tuple[float, float]
+        Updated center
+    Tuple[float, float]
+        Updated velocity
     """
+
     ball = Ball(detection=None)
 
     if match:
         ball.set_color(match)
 
-    if detections:
-        ball.detection = detections[0]
+    if not detections:
+        return ball, prev_center, velocity
 
-    return ball
+    detection = detections[0]
+
+    # Compute center
+    x1, y1 = detection.absolute_points[0]
+    x2, y2 = detection.absolute_points[1]
+    new_center = ((x1 + x2) / 2, (y1 + y2) / 2)
+
+    dy = frame_length * 0.05
+    dx = frame_height * 0.07
+    max_speed_px_per_frame = 15
+
+    # Sanity check logic
+    if (new_center[0] - dx) > prev_center[0] or (new_center[1] - dy) > prev_center[1]:
+        dx1 = new_center[0] - prev_center[0]
+        dy1 = new_center[1] - prev_center[1]
+        distance = np.sqrt(dx1 ** 2 + dy1 ** 2)
+
+        if distance > max_speed_px_per_frame:
+            # Predict next position
+            predicted_x = prev_center[0] + velocity[0]
+            predicted_y = prev_center[1] + velocity[1]
+
+            corrected_points = np.array([
+                [predicted_x - 5, predicted_y - 5],
+                [predicted_x + 5, predicted_y + 5]
+            ])
+            detection.absolute_points = corrected_points
+
+            # Recalculate center
+            x1, y1 = corrected_points[0]
+            x2, y2 = corrected_points[1]
+            new_center = ((x1 + x2) / 2, (y1 + y2) / 2)
+
+    # Update velocity
+    velocity = (new_center[0] - prev_center[0], new_center[1] - prev_center[1])
+    prev_center = new_center
+
+    ball.detection = detection
+
+    return ball, prev_center, velocity
