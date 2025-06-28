@@ -137,7 +137,7 @@ for i, frame in enumerate(video):
         detections=player_detections,
         img=frame,
     )
-
+    height, width, _ = frame.shape
     # Match update
     ball, prev_center, velocity = get_main_ball(
         detections=ball_detections,
