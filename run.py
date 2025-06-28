@@ -16,7 +16,7 @@ from run_utils import (
     get_player_detections,
     update_motion_estimator,
 )
-from soccer import Match, Player, Team
+from soccer import Match, Player, Team, Ball
 from soccer.draw import AbsolutePath
 from soccer.pass_event import Pass
 
@@ -102,6 +102,7 @@ for i, frame in enumerate(video):
     # Get Detections
     players_detections = get_player_detections(player_detector, frame)
     ball_detections = get_ball_detections(ball_detector, frame)
+    update_with_sanity_check(ball_detections)
     #for det in ball_detections:
         #print("Bounding box points:", det.points)
         #print("Data dictionary:", det.data)
