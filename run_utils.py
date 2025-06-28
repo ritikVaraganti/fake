@@ -195,10 +195,10 @@ def get_main_ball(
     detections: List[Detection],
     frame_length,
     frame_height,
-    prev_center: Tuple[float, float],
-    velocity: Tuple[float, float],
+    prev_center: tuple[float, float],
+    velocity: tuple[float, float],
     match: Match = None
-) -> Tuple[Ball, Tuple[float, float], Tuple[float, float]]:
+):
     """
     Gets the main ball from a list of detections with sanity check applied.
 
