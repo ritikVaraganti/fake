@@ -14,10 +14,9 @@ from run_utils import (
     get_ball_detections,
     get_main_ball,
     get_player_detections,
-    update_with_sanity_check,
-    update_motion_estimator
+    update_motion_estimator,
 )
-from soccer import Match, Player, Team, Ball
+from soccer import Match, Player, Team
 from soccer.draw import AbsolutePath
 from soccer.pass_event import Pass
 
@@ -103,10 +102,10 @@ for i, frame in enumerate(video):
     # Get Detections
     players_detections = get_player_detections(player_detector, frame)
     ball_detections = get_ball_detections(ball_detector, frame)
-    #for det in ball_detections:
-        #print("Bounding box points:", det.points)
-        #print("Data dictionary:", det.data)
-        #print("Confidence score:", det.scores)
+    for det in ball_detections:
+        print("Bounding box points:", det.points)
+        print("Data dictionary:", det.data)
+        print("Confidence score:", det.scores)
 
     
 
@@ -127,26 +126,17 @@ for i, frame in enumerate(video):
     ball_track_objects = ball_tracker.update(
         detections=ball_detections, coord_transformations=coord_transformations
     )
-    #print(f'BALL TRACK OBJECTS{ball_track_objects}')
+    print(f'BALL TRACK OBJECTS{ball_track_objects}')
     player_detections = Converter.TrackedObjects_to_Detections(player_track_objects)
     ball_detections = Converter.TrackedObjects_to_Detections(ball_track_objects)
-
-    height, width, _ = frame.shape
-    #print(f'ball_detections 2: {ball_detections}')
+    print(f'ball_detections 2: {ball_detections}')
     player_detections = classifier.predict_from_detections(
         detections=player_detections,
         img=frame,
     )
 
     # Match update
-    ball = Ball(ball_detections)
-    print(ball_detections)
-    if len(ball_detections) == 0:
-        ball = update_with_sanity_check(ball, width, height)
-    else:
-        print(ball_detections[0])
-        ball = update_with_sanity_check(ball, width, height, ball_detections[0])
-    ball = get_main_ball(ball)
+    ball = get_main_ball(ball_detections)
     #print(f'ball: {ball}')
     players = Player.from_detections(detections=players_detections, teams=teams)
     match.update(players, ball)
@@ -184,6 +174,10 @@ for i, frame in enumerate(video):
             frame, counter_background=passes_background, debug=False
         )
 
+    frame = np.array(frame)
+
+    # Write video
+    video.write(frame)
     frame = np.array(frame)
 
     # Write video
