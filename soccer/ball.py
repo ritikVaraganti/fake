@@ -114,7 +114,7 @@ class Ball:
         return Draw.draw_detection(self.detection, frame)
 
     
-    def update_with_sanity_check(self, new_detection: norfair.Detection, frame_length, frame_height, max_speed_px_per_frame=60):
+    def update_with_sanity_check(self, new_detection: norfair.Detection, frame_length, frame_height):
         """
         Updates ball detection, rejecting unrealistic jumps.
         If jump is unrealistic, estimate new center using velocity.
@@ -123,6 +123,7 @@ class Ball:
 
         dy = frame_length * 0.05
         dx = frame_height * 0.07
+        max_speed_px_per_frame=15
         #check if ball is outside of a normal range of movement (bc soccer is a continuous game hardcoding risk boxes should be fine
         #this goes in run_utils, where it is used as a check after detections are retrieved
         if (self.center_abs[0] - dx) > self.prev_center_abs[0] or (self.center_abs[1] - dy) > self.prev_center_abs[1]:
