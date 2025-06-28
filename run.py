@@ -93,6 +93,9 @@ coord_transformations = None
 # Paths
 path = AbsolutePath()
 
+prev_center = (0, 0)
+velocity = (0, 0)
+
 # Get Counter img
 possession_background = match.get_possession_background()
 passes_background = match.get_passes_background()
@@ -136,7 +139,14 @@ for i, frame in enumerate(video):
     )
 
     # Match update
-    ball = get_main_ball(ball_detections)
+    ball, prev_center, velocity = get_main_ball(
+        detections=ball_detections,
+        frame_length=height,
+        frame_height=width,
+        prev_center=prev_center,
+        velocity=velocity,
+        match=match
+    )
     #print(f'ball: {ball}')
     players = Player.from_detections(detections=players_detections, teams=teams)
     match.update(players, ball)
