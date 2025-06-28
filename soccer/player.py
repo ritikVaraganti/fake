@@ -1,4 +1,4 @@
-from array import array
+ffrom array import array
 from typing import List
 
 import numpy as np
