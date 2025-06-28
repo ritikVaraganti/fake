@@ -131,7 +131,7 @@ for i, frame in enumerate(video):
     player_detections = Converter.TrackedObjects_to_Detections(player_track_objects)
     ball_detections = Converter.TrackedObjects_to_Detections(ball_track_objects)
 
-    height, width = frame.shape
+    height, width, _ = frame.shape
     #print(f'ball_detections 2: {ball_detections}')
     player_detections = classifier.predict_from_detections(
         detections=player_detections,
