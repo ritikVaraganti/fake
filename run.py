@@ -141,10 +141,10 @@ for i, frame in enumerate(video):
     # Match update
     ball = Ball(ball_detections)
     print(ball_detections)
-    print(ball_detections[0])
     if len(ball_detections) == 0:
         ball = update_with_sanity_check(ball, width, height)
     else:
+        print(ball_detections[0])
         ball = update_with_sanity_check(ball, width, height, ball_detections[0])
     ball = get_main_ball(ball)
     #print(f'ball: {ball}')
