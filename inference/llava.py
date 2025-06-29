@@ -37,7 +37,7 @@ def llava_mega_image_inference(llava_processor, llava_model, frames, prompt, res
     mega_image_pil = Image.fromarray(mega_image_np)
 
     # Run LLaVA inference
-    prompt = "<|user|>\n<image>\nPretend you are a soccer coach talking to your player. In this series of images depicting player #12's movement with relation to the game, give me a rating on a scale of 1 to 10 and tell me in specific what he is doing right or wrong. If nothing can be observed, make your best judgement. Describe his actions as a whole, not on an image basis.\n<|assistant|>"
+    #prompt = "<|user|>\n<image>\nPretend you are a soccer coach talking to your player. In this series of images depicting player #12's movement with relation to the game, give me a rating on a scale of 1 to 10 and tell me in specific what he is doing right or wrong. If nothing can be observed, make your best judgement. Describe his actions as a whole, not on an image basis.\n<|assistant|>"
 
     inputs = llava_processor(text=prompt, images=mega_image_pil, return_tensors="pt").to("cuda:0")
     
