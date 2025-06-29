@@ -174,13 +174,13 @@ for i, frame in enumerate(video):
     if track_player_id is None:
         print("\nChoose a player ID to track:")
         for p in players:
-            print(f"Player ID: {player.data['id']}")
+            print(f"Player ID: {p.data['id']}")
         try:
             track_player_id = int(input("Enter player ID: "))
         except:
             track_player_id = None
 
-    tracked_player = next((p for p in players if player.data['id'] == track_player_id), None)
+    tracked_player = next((p for p in players if p.data['id'] == track_player_id), None)
 
     if tracked_player is None:
         print(f"Player {track_player_id} not found on screen. They may be subbed off.")
