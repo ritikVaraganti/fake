@@ -61,12 +61,18 @@ args = parser.parse_args()
 
 video = Video(input_path=args.video)
 fps = video.video_capture.get(cv2.CAP_PROP_FPS)
+
+# Object Detectors
 player_detector = YOLO("yolov8m.pt")
 ball_detector = YOLO(args.model)
+
+# HSV Classifier
 hsv_classifier = HSVClassifier(filters=filters)
+
+# Add inertia to classifier
 classifier = InertiaClassifier(classifier=hsv_classifier, inertia=20)
 
-
+# Teams and Match
 chelsea = Team(
     name="Chelsea",
     abbreviation="CHE",
@@ -79,16 +85,31 @@ teams = [chelsea, man_city]
 match = Match(home=chelsea, away=man_city, fps=fps)
 match.team_possession = man_city
 
+
 player_tracker = Tracker(
     distance_function=mean_euclidean,
     distance_threshold=250,
     initialization_delay=3,
-    hit_counter_max=90
+    hit_counter_max=90,
 )
 
-ball_tracker = Tracker(mean_euclidean, 80, 1, 0.2, 30)
+ball_tracker = Tracker(
+    distance_function=mean_euclidean,
+    distance_threshold=80,            # Smaller for small objects like the ball
+    initialization_delay=1,           # Ball gets tracked as soon as it's detected once
+    detection_threshold=0.2,          # Accepts lower-confidence detections (your p ~ 0.3)
+    hit_counter_max=30,               # Object persists for a short while if detection is lost
+)
 motion_estimator = MotionEstimator()
+coord_transformations = None
+
+# Paths
 path = AbsolutePath()
+
+prev_center = (0, 0)
+velocity = (0, 0)
+
+# Get Counter img
 possession_background = match.get_possession_background()
 passes_background = match.get_passes_background()
 
