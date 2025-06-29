@@ -191,6 +191,7 @@ for i, frame in enumerate(video):
         continue
 
     if len(frame_buffer) == buffer_size:
+        prompt = f"<|user|>\n<image>\nPretend you are a soccer coach talking to your player. In this series of images depicting player #{track_player_id}'s movement with relation to the game, give me a rating on a scale of 1 to 100 and tell me in specific what he is doing right or wrong. If nothing can be observed, make your best judgement. Describe his actions as a whole, not on an image basis.\n<|assistant|>"
         result = llava_mega_image_inference(llava_processor, llava_model, frame_buffer, prompt)
         print(f"\nLLaVA output for player {track_player_id}: {result}\n")
         frame_buffer.clear()
