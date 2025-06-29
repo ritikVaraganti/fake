@@ -10,6 +10,9 @@ from norfair.distances import mean_euclidean
 
 from inference import Converter, HSVClassifier, InertiaClassifier, YoloV5
 from inference.filters import filters
+from llava import (
+    llava_mega_image_inference
+)
 from run_utils import (
     get_ball_detections,
     get_main_ball,
@@ -62,11 +65,20 @@ player_detector = YOLO("yolov8m.pt")
 ball_detector = YOLO(args.model)
 hsv_classifier = HSVClassifier(filters=filters)
 classifier = InertiaClassifier(classifier=hsv_classifier, inertia=20)
-chelsea = Team("Chelsea", "CHE", (255, 0, 0), (244, 86, 64), (255, 255, 255))
-man_city = Team("Man City", "MNC", (240, 230, 188))
+
+
+chelsea = Team(
+    name="Chelsea",
+    abbreviation="CHE",
+    color=(255, 0, 0),
+    board_color=(244, 86, 64),
+    text_color=(255, 255, 255),
+)
+man_city = Team(name="Man City", abbreviation="MNC", color=(240, 230, 188))
 teams = [chelsea, man_city]
 match = Match(home=chelsea, away=man_city, fps=fps)
 match.team_possession = man_city
+
 player_tracker = Tracker(mean_euclidean, 250, 3, 90)
 ball_tracker = Tracker(mean_euclidean, 80, 1, 0.2, 30)
 motion_estimator = MotionEstimator()
