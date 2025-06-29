@@ -1,3 +1,6 @@
+import cv2
+
+
 def llava_mega_image_inference(llava_processor, llava_model, frames, prompt, resize_dim=(640, 360)):
     """
     Concatenates frames into a mega image and runs LLaVA inference on it.
