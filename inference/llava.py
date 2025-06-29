@@ -1,4 +1,8 @@
 import cv2
+import numpy as np
+from PIL import Image
+import torch
+
 
 
 def llava_mega_image_inference(llava_processor, llava_model, frames, prompt, resize_dim=(640, 360)):
