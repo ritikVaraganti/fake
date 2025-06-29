@@ -174,7 +174,7 @@ for i, frame in enumerate(video):
     if track_player_id is None:
         print("\nChoose a player ID to track:")
         for p in players:
-            print(f"Player ID: {p.detection.data['id']}")
+            print(f"Player ID: {p.detection.data}")
         try:
             track_player_id = int(input("Enter player ID: "))
         except:
