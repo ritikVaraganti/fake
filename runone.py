@@ -79,7 +79,13 @@ teams = [chelsea, man_city]
 match = Match(home=chelsea, away=man_city, fps=fps)
 match.team_possession = man_city
 
-player_tracker = Tracker(mean_euclidean, 250, 3, 90)
+player_tracker = Tracker(
+    distance_function=mean_euclidean,
+    distance_threshold=250,
+    initialization_delay=3,
+    hit_counter_max=90
+)
+
 ball_tracker = Tracker(mean_euclidean, 80, 1, 0.2, 30)
 motion_estimator = MotionEstimator()
 path = AbsolutePath()
