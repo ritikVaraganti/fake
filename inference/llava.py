@@ -47,6 +47,6 @@ def llava_mega_image_inference(llava_processor, llava_model, frames, prompt, res
     # with torch.no_grad():
     #     outputs = llava_model.generate(**inputs, max_new_tokens=100)
 
-    result = processor.tokenizer.decode(output[0], skip_special_tokens=True)
+    result = llava_processor.tokenizer.decode(output[0], skip_special_tokens=True)
 
     return result
