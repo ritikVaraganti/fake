@@ -8,7 +8,7 @@ from norfair import Tracker, Video
 from norfair.camera_motion import MotionEstimator
 from norfair.distances import mean_euclidean
 
-from inference import Converter, HSVClassifier, InertiaClassifier, YoloV5
+from inference import Converter, HSVClassifier, InertiaClassifier, YoloV5, llava
 from inference.filters import filters
 from llava import (
     llava_mega_image_inference
