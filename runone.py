@@ -10,7 +10,7 @@ from norfair.distances import mean_euclidean
 
 from inference import Converter, HSVClassifier, InertiaClassifier, YoloV5, llava
 from inference.filters import filters
-from llava import (
+from inference.llava import (
     llava_mega_image_inference
 )
 from run_utils import (
