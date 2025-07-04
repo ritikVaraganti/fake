@@ -100,6 +100,12 @@ ball_tracker = Tracker(
     detection_threshold=0.2,          # Accepts lower-confidence detections (your p ~ 0.3)
     hit_counter_max=30,               # Object persists for a short while if detection is lost
 )
+
+#point of concern, have to update for every vid?
+
+
+
+
 motion_estimator = MotionEstimator()
 coord_transformations = None
 
@@ -116,8 +122,8 @@ passes_background = match.get_passes_background()
 track_player_id = None
 frame_buffer = []
 buffer_size = 5
-prompt = "Evaluate player performance. Focus on key passes, tackles, fouls, and provide feedback."
-
+#prompt = "Evaluate player performance. Focus on key passes, tackles, fouls, and provide feedback."
+z = 0
 for i, frame in enumerate(video):
     # Get Detections
     players_detections = get_player_detections(player_detector, frame)
@@ -169,7 +175,11 @@ for i, frame in enumerate(video):
     match.update(players, ball)
 
     frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-    frame_buffer.append(frame_rgb)
+    if z >= 5:
+        frame_buffer.append(frame_rgb)
+        z = 0
+    else:
+        z += 1
 
     if track_player_id is None:
         print("\nChoose a player ID to track:")
