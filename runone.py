@@ -124,6 +124,7 @@ frame_buffer = []
 buffer_size = 5
 #prompt = "Evaluate player performance. Focus on key passes, tackles, fouls, and provide feedback."
 z = 0
+tracked_player = None
 for i, frame in enumerate(video):
     # Get Detections
     players_detections = get_player_detections(player_detector, frame)
