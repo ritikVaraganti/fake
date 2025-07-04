@@ -29,9 +29,9 @@ import cv2
 import numpy as np
 from PIL import Image
 
-llava_processor = LlavaNextProcessor.from_pretrained("llava-hf/llava-v1.6-vicuna-13b-hf")
+llava_processor = LlavaNextProcessor.from_pretrained("llava-hf/llava-v1.6-mistral-7b-hf")
 llava_model = LlavaNextForConditionalGeneration.from_pretrained(
-    "llava-hf/llava-v1.6-vicuna-13b-hf",
+    "llava-hf/llava-v1.6-mistral-7b-hf",
     torch_dtype=torch.float16,
     low_cpu_mem_usage=True
 )
