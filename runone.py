@@ -7,6 +7,7 @@ import PIL
 from norfair import Tracker, Video
 from norfair.camera_motion import MotionEstimator
 from norfair.distances import mean_euclidean
+import math
 
 from inference import Converter, HSVClassifier, InertiaClassifier, YoloV5, llava
 from inference.filters import filters
@@ -178,7 +179,7 @@ for i, frame in enumerate(video):
     frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
     movement_threshold = 7  # pixels
     if tracked_player != None:   
-        if tracked_player and tracked_player.velocity.magnitude() > movement_threshold:
+        if tracked_player and math.sqrt(velocity[0]**2 + velocity[1]**2) > movement_threshold:
             frame_buffer.append(frame_rgb)
 
 
