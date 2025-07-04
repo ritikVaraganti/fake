@@ -175,11 +175,11 @@ for i, frame in enumerate(video):
     match.update(players, ball)
 
     frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-    if z >= 5:
+    movement_threshold = 10  # pixels
+    
+    if tracked_player and tracked_player.velocity.magnitude() > movement_threshold:
         frame_buffer.append(frame_rgb)
-        z = 0
-    else:
-        z += 1
+
 
     if track_player_id is None:
         print("\nChoose a player ID to track:")
